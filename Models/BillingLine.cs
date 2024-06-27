@@ -5,5 +5,7 @@ namespace EmpresaNexer.Models
         public int Id { get; set; }
         public Billing Billing { get; set; }
         public Product Product { get; set; }
+
+
     }
 }

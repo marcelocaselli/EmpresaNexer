@@ -33,10 +33,6 @@ namespace EmpresaNexer.Data.Mappings
                 .HasColumnName("Address")
                 .HasColumnType("VARCHAR")
                 .HasMaxLength(250);
-
-            builder
-                .HasMany(x => x.Billings)
-                .WithOne(x => x.Customer);
         }
     }
 }

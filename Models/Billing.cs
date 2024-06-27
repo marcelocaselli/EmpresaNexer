@@ -5,6 +5,7 @@ namespace EmpresaNexer.Models
         public int Id { get; set; }
         public DateTime DataVencimento { get; set; }
         public Customer Customer { get; set; }
-        public BillingLine BillingLine { get; set; }
+        public IList<BillingLine> BillingLines { get; set; }
+
     }
 }

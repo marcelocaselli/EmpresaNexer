@@ -4,6 +4,6 @@ namespace EmpresaNexer.Models
     {
         public int Id { get; set; }
         public string NameProduct { get; set; }
-        public BillingLine BillingLine { get; set; }
+        public IList<BillingLine> BillingLines { get; set; }
     }
 }

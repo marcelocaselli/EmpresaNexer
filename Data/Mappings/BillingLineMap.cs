@@ -17,8 +17,14 @@ namespace EmpresaNexer.Data.Mappings
                 .UseIdentityColumn();
 
             builder
-                .HasOne(x => x.Product)
-                .WithOne(x => x.BillingLine);
+            .HasOne(x => x.Billing)
+            .WithMany(x => x.BillingLines);
+
+            builder
+                .HasOne(x => x.Billing)
+                .WithMany(x => x.BillingLines)
+                .HasConstraintName("FK_BillingLine_Billing")
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
