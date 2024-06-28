@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EmpresaNexer.Migrations
 {
-    [DbContext(typeof(TextNexerDataContext))]
-    [Migration("20240627025826_CreateInitial")]
+    [DbContext(typeof(EmpresaNexerDataContext))]
+    [Migration("20240627125434_CreateInitial")]
     partial class CreateInitial
     {
         /// <inheritdoc />

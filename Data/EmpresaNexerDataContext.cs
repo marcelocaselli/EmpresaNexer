@@ -4,7 +4,7 @@ using EmpresaNexer.Models;
 
 namespace EmpresaNexer.Data
 {
-    public class TextNexerDataContext : DbContext
+    public class EmpresaNexerDataContext : DbContext
     {
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Product> Products { get; set; }
@@ -12,7 +12,7 @@ namespace EmpresaNexer.Data
         public DbSet<BillingLine> BillingLines { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
-            => options.UseSqlServer("Server=localhost,1433; Database=TestNexer;User ID = sa; Password=1q2w3e4r@#$;TrustServerCertificate=true");
+            => options.UseSqlServer("Server=localhost,1433; Database=EmpresaNexer;User ID = sa; Password=1q2w3e4r@#$;TrustServerCertificate=true");
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

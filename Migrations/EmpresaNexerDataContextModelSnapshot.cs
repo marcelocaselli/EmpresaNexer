@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EmpresaNexer.Migrations
 {
-    [DbContext(typeof(TextNexerDataContext))]
-    partial class TextNexerDataContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(EmpresaNexerDataContext))]
+    partial class EmpresaNexerDataContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
