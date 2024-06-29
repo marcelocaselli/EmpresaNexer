@@ -21,12 +21,6 @@ namespace EmpresaNexer.Data.Mappings
                 .HasColumnName("NameProduct")
                 .HasColumnType("NVARCHAR")
                 .HasMaxLength(180);
-
-            builder
-            .HasMany(x => x.BillingLines)
-            .WithOne(x => x.Product)
-            .HasConstraintName("FK_Product_BillingLine")
-            .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

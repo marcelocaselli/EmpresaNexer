@@ -16,9 +16,14 @@ namespace EmpresaNexer.Data.Mappings
                 .ValueGeneratedOnAdd()
                 .UseIdentityColumn();
 
+            builder.Property(x => x.Description)
+                .IsRequired()
+                .HasColumnName("Description")
+                .HasColumnType("NVARCHAR")
+                .HasMaxLength(300);
+
             builder
-            .HasOne(x => x.Billing)
-            .WithMany(x => x.BillingLines);
+            .HasOne(x => x.Product);
 
             builder
                 .HasOne(x => x.Billing)

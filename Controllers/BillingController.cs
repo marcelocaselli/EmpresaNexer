@@ -12,8 +12,15 @@ namespace EmpresaNexer.Controllers
         public async Task<IActionResult> GetAsync(
             [FromServices] EmpresaNexerDataContext context)
         {
-            var billing = await context.Billings.ToListAsync();
-            return Ok(billing);
+            try
+            {
+                var billing = await context.Billings.ToListAsync();
+                return Ok(billing);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "05XE06 - Falha interna no servidor");
+            }
         }
 
         [HttpGet("v1/billings/{id:int}")]
@@ -21,14 +28,21 @@ namespace EmpresaNexer.Controllers
             [FromRoute] int id,
             [FromServices] EmpresaNexerDataContext context)
         {
-            var billing = await context
+            try
+            {
+                var billing = await context
                 .Billings
                 .FirstOrDefaultAsync(x => x.Id == id);
 
-            if (billing == null)
-                return NotFound();
+                if (billing == null)
+                    return NotFound();
 
-            return Ok(billing);
+                return Ok(billing);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "05XE05 - Falha interna no servidor");
+            }
         }
 
         [HttpPost("v1/billings")]
@@ -36,10 +50,21 @@ namespace EmpresaNexer.Controllers
             [FromBody] Billing model,
             [FromServices] EmpresaNexerDataContext context)
         {
-            await context.Billings.AddAsync(model);
-            await context.SaveChangesAsync();
+            try
+            {
+                await context.Billings.AddAsync(model);
+                await context.SaveChangesAsync();
 
-            return Created($"v1/billings/{model.Id}", model);
+                return Created($"v1/billings/{model.Id}", model);
+            }
+            catch (DbUpdateException ex)
+            {
+                return StatusCode(500, "05XE9 - Não foi possível incluir o cliente");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "05X10 - Falha interna no servidor");
+            }
         }
 
         [HttpPut("v1/billings/{id:int}")]
@@ -48,19 +73,30 @@ namespace EmpresaNexer.Controllers
             [FromBody] Billing model,
             [FromServices] EmpresaNexerDataContext context)
         {
-            var billing = await context
+            try
+            {
+                var billing = await context
                 .Billings
                 .FirstOrDefaultAsync(x => x.Id == id);
 
-            if (billing == null)
-                return NotFound();
+                if (billing == null)
+                    return NotFound();
 
-            billing.DataVencimento = model.DataVencimento;
+                billing.DataVencimento = model.DataVencimento;
 
-            context.Billings.Update(billing);
-            await context.SaveChangesAsync();
+                context.Billings.Update(billing);
+                await context.SaveChangesAsync();
 
-            return Ok(model);
+                return Ok(model);
+            }
+            catch (DbUpdateException ex)
+            {
+                return StatusCode(500, "05XE8 - Não foi possível alterar o cliente");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "05X11 - Falha interna no servidor");
+            }
         }
 
         [HttpDelete("v1/billings/{id:int}")]
@@ -68,17 +104,28 @@ namespace EmpresaNexer.Controllers
         [FromRoute] int id,
         [FromServices] EmpresaNexerDataContext context)
         {
-            var billing = await context
+            try
+            {
+                var billing = await context
                 .Billings
                 .FirstOrDefaultAsync(x => x.Id == id);
 
-            if (billing == null)
-                return NotFound();
+                if (billing == null)
+                    return NotFound();
 
-            context.Billings.Remove(billing);
-            await context.SaveChangesAsync();
+                context.Billings.Remove(billing);
+                await context.SaveChangesAsync();
 
-            return Ok(billing);
+                return Ok(billing);
+            }
+            catch (DbUpdateException ex)
+            {
+                return StatusCode(500, "05XE7 - Não foi possível excluir o cliente");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "05X12 - Falha interna no servidor");
+            }
         }
     }
 }

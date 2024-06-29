@@ -21,15 +21,10 @@ namespace EmpresaNexer.Data.Mappings
                 .HasColumnName("DataVencimento")
                 .HasColumnType("datetime");
 
-            builder
-                .HasOne(x => x.Customer)
-                .WithMany(x => x.Billings)
-                .HasConstraintName("FK_Billing_Customer")
-                .OnDelete(DeleteBehavior.Cascade);
-
-
-
-
+            builder.HasOne(x => x.Customer)
+               .WithMany(x => x.Billings)
+               .HasConstraintName("FK_Customer_Billing")
+               .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

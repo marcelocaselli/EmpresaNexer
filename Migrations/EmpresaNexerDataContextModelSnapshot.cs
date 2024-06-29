@@ -55,6 +55,12 @@ namespace EmpresaNexer.Migrations
                     b.Property<int>("BillingId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("NVARCHAR")
+                        .HasColumnName("Description");
+
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
@@ -124,7 +130,7 @@ namespace EmpresaNexer.Migrations
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("FK_Billing_Customer");
+                        .HasConstraintName("FK_Customer_Billing");
 
                     b.Navigation("Customer");
                 });
@@ -139,11 +145,10 @@ namespace EmpresaNexer.Migrations
                         .HasConstraintName("FK_BillingLine_Billing");
 
                     b.HasOne("EmpresaNexer.Models.Product", "Product")
-                        .WithMany("BillingLines")
+                        .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK_Product_BillingLine");
+                        .IsRequired();
 
                     b.Navigation("Billing");
 
@@ -158,11 +163,6 @@ namespace EmpresaNexer.Migrations
             modelBuilder.Entity("EmpresaNexer.Models.Customer", b =>
                 {
                     b.Navigation("Billings");
-                });
-
-            modelBuilder.Entity("EmpresaNexer.Models.Product", b =>
-                {
-                    b.Navigation("BillingLines");
                 });
 #pragma warning restore 612, 618
         }

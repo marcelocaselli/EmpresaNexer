@@ -52,7 +52,7 @@ namespace EmpresaNexer.Migrations
                 {
                     table.PrimaryKey("PK_Billing", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Billing_Customer",
+                        name: "FK_Customer_Billing",
                         column: x => x.CustomerId,
                         principalTable: "Customer",
                         principalColumn: "Id",
@@ -65,6 +65,7 @@ namespace EmpresaNexer.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Description = table.Column<string>(type: "NVARCHAR(300)", maxLength: 300, nullable: false),
                     BillingId = table.Column<int>(type: "int", nullable: false),
                     ProductId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -78,7 +79,7 @@ namespace EmpresaNexer.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Product_BillingLine",
+                        name: "FK_BillingLine_Product_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Product",
                         principalColumn: "Id",
