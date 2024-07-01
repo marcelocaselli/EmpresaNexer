@@ -1,5 +1,7 @@
 using EmpresaNexer.Data;
+using EmpresaNexer.Extensions;
 using EmpresaNexer.Models;
+using EmpresaNexer.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,11 +17,11 @@ namespace EmpresaNexer.Controllers
             try
             {
                 var customers = await context.Customers.ToListAsync();
-                return Ok(customers);
+                return Ok(new ResultViewModel<List<Customer>>(customers));
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "05XE06 - Falha interna no servidor");
+                return StatusCode(500, new ResultViewModel<List<Customer>>("05XE06 - Falha interna no servidor"));
             }
         }
 
@@ -35,42 +37,52 @@ namespace EmpresaNexer.Controllers
                     .FirstOrDefaultAsync(x => x.Id == id);
 
                 if (customer == null)
-                    return NotFound();
+                    return NotFound(new ResultViewModel<Customer>("Cliente não encontrado"));
 
-                return Ok(customer);
+                return Ok(new ResultViewModel<Customer>(customer));
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "05XE05 - Falha interna no servidor");
+                return StatusCode(500, new ResultViewModel<Customer>("05XE05 - Falha interna no servidor"));
             }
         }
 
         [HttpPost("v1/customers")]
         public async Task<IActionResult> PostAsync(
-            [FromBody] Customer model,
+            [FromBody] EditorCustomerViewModel model,
             [FromServices] EmpresaNexerDataContext context)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(new ResultViewModel<Customer>(ModelState.GetErrors()));
+
             try
             {
-                await context.Customers.AddAsync(model);
+                var customer = new Customer
+                {
+                    Id = 0,
+                    Name = model.Name,
+                    Email = model.Email,
+                    Address = model.Address
+                };
+                await context.Customers.AddAsync(customer);
                 await context.SaveChangesAsync();
 
-                return Created($"v1/customers/{model.Id}", model);
+                return Created($"v1/customers/{customer.Id}", new ResultViewModel<Customer>(customer));
             }
             catch (DbUpdateException ex)
             {
-                return StatusCode(500, "05XE9 - Não foi possível incluir o cliente");
+                return StatusCode(500, new ResultViewModel<Customer>("05XE9 - Não foi possível incluir o cliente"));
             }
-            catch (Exception ex)
+            catch
             {
-                return StatusCode(500, "05X10 - Falha interna no servidor");
+                return StatusCode(500, new ResultViewModel<Customer>("05X10 - Falha interna no servidor"));
             }
         }
 
         [HttpPut("v1/customers/{id:int}")]
         public async Task<IActionResult> PutAsync(
             [FromRoute] int id,
-            [FromBody] Customer model,
+            [FromBody] EditorCustomerViewModel model,
             [FromServices] EmpresaNexerDataContext context)
         {
             try
@@ -80,7 +92,7 @@ namespace EmpresaNexer.Controllers
                 .FirstOrDefaultAsync(x => x.Id == id);
 
                 if (customer == null)
-                    return NotFound();
+                    return NotFound(new ResultViewModel<Customer>("Cliente não encontrado"));
 
                 customer.Name = model.Name;
                 customer.Email = model.Email;
@@ -89,15 +101,15 @@ namespace EmpresaNexer.Controllers
                 context.Customers.Update(customer);
                 await context.SaveChangesAsync();
 
-                return Ok(model);
+                return Ok(new ResultViewModel<Customer>(customer));
             }
             catch (DbUpdateException ex)
             {
-                return StatusCode(500, "05XE8 - Não foi possível alterar o cliente");
+                return StatusCode(500, new ResultViewModel<Customer>("05XE8 - Não foi possível alterar o cliente"));
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "05X11 - Falha interna no servidor");
+                return StatusCode(500, new ResultViewModel<Customer>("05X11 - Falha interna no servidor"));
             }
         }
 
@@ -113,20 +125,20 @@ namespace EmpresaNexer.Controllers
                 .FirstOrDefaultAsync(x => x.Id == id);
 
                 if (customer == null)
-                    return NotFound();
+                    return NotFound(new ResultViewModel<Customer>("Cliente não encontrado"));
 
                 context.Customers.Remove(customer);
                 await context.SaveChangesAsync();
 
-                return Ok(customer);
+                return Ok(new ResultViewModel<Customer>(customer));
             }
             catch (DbUpdateException ex)
             {
-                return StatusCode(500, "05XE7 - Não foi possível excluir o cliente");
+                return StatusCode(500, new ResultViewModel<Customer>("05XE7 - Não foi possível excluir o cliente"));
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "05X12 - Falha interna no servidor");
+                return StatusCode(500, new ResultViewModel<Customer>("05X12 - Falha interna no servidor"));
             }
         }
     }
